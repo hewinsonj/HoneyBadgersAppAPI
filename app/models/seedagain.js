@@ -2,6 +2,40 @@ const mongoose = require("mongoose");
 const Activity = require("./activity");
 const db = require("../../config/db");
 
+
+
+const startUsers = [
+     {  
+      username: "Guest",
+      email: "guest@gmails.com",
+      password: "pop",
+      password_confirmation: "pop",
+      createdDate: "2024-10-23",
+      avatar: "https://i.imgur.com/uEW4fPX.png",
+     },
+     {  
+      username: "GuestFriend",
+      email: "guestFriend@gmails.com",
+      password: "pop",
+      password_confirmation: "pop",
+      createdDate: "2024-10-23",
+      avatar: "https://i.imgur.com/uEW4fPX.png",
+     },
+     {  
+      username: "GuestOtherFriend",
+      email: "guestOtherFriend@gmails.com",
+      password: "pop",
+      password_confirmation: "pop",
+      createdDate: "2024-10-23",
+      avatar: "https://i.imgur.com/uEW4fPX.png",
+     },
+
+];
+
+
+
+
+
 const startActivities = [
   {
     activity: "Take a bubble bath",
@@ -50,23 +84,25 @@ const userIds = [
 
 const activities = [];
 
-for (let i = 0; i < 10; i++) {
-  let type = types[0];
-  let user = userIds[0];
-  let activity = `SEED2-${type}-${i}`;
-  activities.push({
-    activity: activity,
-    accessibility: 1,
-    type: type,
-    participants: 1,
-    progress: 100,
-    owner: user,
-    price: 2,
+for (let i = 0; i < 7; i++) {
+  for (let a = 0; a < 19; a++) {
+      let type = types[i];
+      // let user = userIds[0];
+      let activity = `SEED2-${type}-${i}-${a}`;
+      activities.push({
+        activity: activity,
+        accessibility: 1,
+        type: type,
+        participants: 1,
+        progress: 100,
+        owner: `671701284a2a7119d5b53bd0`,
+        price: 2,
   });
+  }
 }
 
 for (let i = 0; i < 20; i++) {
-  let type = types[3];
+  let type = types[1];
   let user = userIds[1];
   let activity = `SEED2-${type}-${i}`;
   activities.push({
@@ -75,13 +111,13 @@ for (let i = 0; i < 20; i++) {
     type: type,
     participants: 1,
     progress: 100,
-    owner: user,
+    owner: `66f3713399eac3608b60e0b7`,
     price: 1,
   });
 }
 
 for (let i = 0; i < 6; i++) {
-  let type = types[4];
+  let type = types[2];
   let user = userIds[1];
   let activity = `SEED2-${type}-${i}`;
   activities.push({
@@ -90,8 +126,23 @@ for (let i = 0; i < 6; i++) {
     type: type,
     participants: 1,
     progress: 100,
-    owner: user,
+    owner: `66f3713399eac3608b60e0b7`,
     price: 0,
+  });
+}
+
+for (let i = 0; i < 20; i++) {
+  let type = types[3];
+  let user = userIds[2];
+  let activity = `SEED2-${type}-${i}`;
+  activities.push({
+    activity: activity,
+    accessibility: 1,
+    type: type,
+    participants: 1,
+    progress: 100,
+    owner: `66f3713399eac3608b60e0b7`,
+    price: 1,
   });
 }
 
@@ -105,7 +156,7 @@ for (let i = 0; i < 20; i++) {
     type: type,
     participants: 1,
     progress: 100,
-    owner: user,
+    owner: `66f3713399eac3608b60e0b7`,
     price: 1,
   });
 }

@@ -226,4 +226,40 @@ router.get("/user/:userId", requireToken, (req, res, next) => {
     .catch(next);
 });
 
+// GET /api/current-user - Check for logged-in user
+router.get('/user/currentuser', requireToken, (req, res, next) => {
+  // Check if the user is authenticated
+  const userId = req.user ? req.user._id : null; // Assuming req.user is set after authentication
+
+  if (!userId) {
+    // If there's no logged-in user, return a 401 response
+    return res.status(401).json({
+      message: 'No user is currently logged in.',
+    });
+  }
+
+  // If user is authenticated, find the user by ID
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        // If no user is found, return a 404 response
+        return res.status(404).json({
+          message: 'User not found.',
+        });
+      }
+
+      // Return the user's info
+      res.status(200).json({
+        user: {
+          email: user.email,
+          createdDate: user.createdDate,
+          buddies: user.buddies,
+          avatar: user.avatar,
+        },
+      });
+    })
+    .catch(next); // Pass any errors to the error handler middleware
+});
+
+
 module.exports = router;
