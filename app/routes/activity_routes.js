@@ -149,12 +149,21 @@ router.post("/activities", requireToken, (req, res, next) => {
 // GET Random Activity
 // SHOW (/activities/random)
 //////////////////
-router.get("/random", (req, res, next) => {
-  console.log("get /activites/random");
-  axios(`http://www.boredapi.com/api/activity`).then((activity) => {
-    console.log(activity.data);
-    res.send(activity.data);
-  });
+router.get("/random", requireToken, (req, res, next) => {
+  console.log("get /activities/random");
+
+  Activity.aggregate([{ $sample: { size: 1 } }]) // Randomly samples one activity
+    .then((activities) => {
+      if (activities.length > 0) {
+        res.status(200).json(activities[0]); // Return the random activity
+      } else {
+        res.status(404).json({ message: "No activities found" });
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching random activity:", error);
+      res.status(500).json({ error: "Failed to fetch random activity" });
+    });
 });
 
 ///////////////////

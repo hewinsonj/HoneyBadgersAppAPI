@@ -17,6 +17,11 @@ const messageSchema = new mongoose.Schema(
       required: true,
       default: "would love to connect",
     },
+    isBuddyMessage: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   {
     timestamps: true,

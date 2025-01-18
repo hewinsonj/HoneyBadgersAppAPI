@@ -53,6 +53,54 @@ router.get("/messages", (req, res, next) => {
     .catch(next);
 });
 
+// router.get("/messages/between/:user1Id/:user2Id", requireToken, (req, res, next) => {
+//   const { user1Id, user2Id } = req.params;
+
+//   Message.find({
+//     $or: [
+//       { owner: user1Id, recipient: user2Id },
+//       { owner: user2Id, recipient: user1Id },
+//     ],
+//   })
+//     .sort({ createdAt: 1 }) // Sort by oldest to newest
+//     .then((messages) => res.status(200).json({ messages }))
+//     .catch(next);
+// });
+
+
+router.get("/messages/between/:user1Id/:user2Id", requireToken, (req, res, next) => {
+  const { user1Id, user2Id } = req.params;
+
+  // Log the intake request parameters
+  console.log("Incoming request to /messages/between");
+  console.log("User 1 ID:", user1Id);
+  console.log("User 2 ID:", user2Id);
+
+  // Define the query to find messages
+  const query = {
+    $or: [
+      { owner: user1Id, recipient: user2Id },
+      { owner: user2Id, recipient: user1Id },
+    ],
+  };
+
+  // Log the query being used
+  console.log("Query:", JSON.stringify(query, null, 2));
+
+  Message.find(query)
+    .sort({ createdAt: 1 }) // Sort by oldest to newest
+    .then((messages) => {
+      // Log the result of the query
+      console.log("Messages retrieved:", messages);
+      res.status(200).json({ messages });
+    })
+    .catch((error) => {
+      // Log the error if something goes wrong
+      console.error("Error retrieving messages:", error);
+      next(error);
+    });
+});
+
 ///////////////////
 // SHOW MINE
 // GET (/activities/mine)
@@ -103,13 +151,28 @@ router.get("/messages/:id", requireToken, (req, res, next) => {
 // CREATE
 // POST (/activities)
 //////////////////
+// router.post("/messages", requireToken, (req, res, next) => {
+//   req.body.message.owner = req.user.id;
+//   Message.create(req.body.message)
+//     .then((message) => {
+//       res.status(201).json({ message: message });
+//     })
+//     .catch(next);
+// });
+
 router.post("/messages", requireToken, (req, res, next) => {
-  req.body.message.owner = req.user.id;
+  req.body.message.owner = req.user.id; // Automatically set owner to the logged-in user
+  console.log("Creating message with data:", req.body.message);
+
   Message.create(req.body.message)
     .then((message) => {
-      res.status(201).json({ message: message });
+      console.log("Message successfully created:", message);
+      res.status(201).json({ message });
     })
-    .catch(next);
+    .catch((error) => {
+      console.error("Error creating message:", error);
+      next(error);
+    });
 });
 
 ///////////////////
