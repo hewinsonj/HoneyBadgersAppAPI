@@ -404,6 +404,7 @@ const seedDatabase = async () => {
       username: "Guest",
       email: "guest@gmails.com",
       password: "pop",
+      createdDate:"2025-01-01"
     };
     const hashedPassword = await bcrypt.hash(guestUser.password, 10);
     const createdUser = await User.create({
